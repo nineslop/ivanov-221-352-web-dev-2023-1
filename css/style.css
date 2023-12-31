@@ -1,0 +1,85 @@
+::selection {
+    background: #40E0D0;
+    color: #fff;
+}
+
+.page-link{
+    color: #02BC7D;
+    position: relative;
+    display: block;
+    padding: var(--bs-pagination-padding-y) var(--bs-pagination-padding-x);
+    font-size: var(--bs-pagination-font-size);
+    text-decoration: none;
+    border: var(--bs-pagination-border-width) solid var(--bs-pagination-border-color);
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.page-link:hover{
+    z-index: 2;
+    color:#02BC7D;
+    border-color:#02BC7D;
+}
+
+.btn{
+    color: #02BC7D;
+    border-color: #02BC7D; */
+}
+
+.input-group{
+    position: relative;
+    flex: 1 1 auto;
+    width: 1%;
+    min-width: 0;
+}
+
+.form-control{
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--bs-body-color);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: var(--bs-body-bg);
+    background-clip: padding-box;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+/* footer */
+.payment-option {
+    flex: 1;
+}
+
+.payment-options {
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+    list-style-type: none;
+}
+
+
+.payment-options li {
+    margin: 0;
+}
+
+.socialnet a{
+    color: #02BC7D;
+    text-decoration: none;
+}
+
+.container h3{
+    color: #02BC7D;
+}
+
+.container p{
+    color: #02BC7D;
+}
+
+.containerfooter {
+    text-align: center;
+}
