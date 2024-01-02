@@ -18,11 +18,18 @@
     z-index: 2;
     color:#02BC7D;
     border-color:#02BC7D;
+    background-color: #40E0D0;
 }
 
 .btn{
     color: #02BC7D;
-    border-color: #02BC7D; */
+    border-color: #02BC7D;
+}
+
+.btn:hover{
+    color: #02BC7D;
+    border-color: #02BC7D;
+    background-color: #40E0D0;
 }
 
 .input-group{
