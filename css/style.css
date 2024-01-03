@@ -21,6 +21,14 @@
     background-color: #40E0D0;
 }
 
+.page-link:focus{
+    color:#02BC7D;
+}
+
+.page-link:focus-visible{
+    border-color: #02BC7D;
+}
+
 .btn{
     color: #02BC7D;
     border-color: #02BC7D;
