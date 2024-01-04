@@ -1,9 +1,12 @@
 // Получить список маршрутов и рабочие buttons, 10 для каждой страницы
-var api_key = "feac5a33-e5b8-4b71-8a25-76eb0f1954ba";
+const api_key = "feac5a33-e5b8-4b71-8a25-76eb0f1954ba";
 const url = `http://exam-2023-1-api.std-900.ist.mospolytech.ru/api/routes?api_key=${api_key}`;
-var tablemaster = document.getElementById("111111");
-var paginationmaster = document.getElementById("pagination-buttons");
-var pageUP = document.getElementById("pagePAGE");
+const tablemaster = document.getElementById("111111");
+const paginationmaster = document.getElementById("pagination-buttons");
+const pageUP = document.getElementById("pagePAGE");
+const guideTable = document.getElementById("guideTable");
+const guidesContainer = document.getElementById("guidesContainer");
+const guidesRouteName = document.getElementById("guidesRouteName");
 
 // Функция для получения и отображения данных для определенной страницы
 function fetchDataAndDisplay(pageIndex) {
@@ -14,7 +17,7 @@ function fetchDataAndDisplay(pageIndex) {
     .then(function(data) {
       
       tablemaster.innerHTML = "";
-
+      // console.log(data);
       const totalPages = Math.ceil(data.length / 10);
       const startIndex = pageIndex * 10;
       const endIndex = Math.min((pageIndex + 1) * 10, data.length);
@@ -27,11 +30,14 @@ function fetchDataAndDisplay(pageIndex) {
         const truncatedMainObject = element.mainObject.slice(0, 195);
         const truncatedDescription = element.description.slice(0, 195);
 
+        // console.log(`onclick="createGuide(${element.id},${element.name});"`);
+
+        //столбцов 10 для каждой страницы
         row.innerHTML = `
-          <td data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="">${element.name}</td>
-          <td data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="">${truncatedMainObject}${element.mainObject.length > 195 ? '...' : ''}</td>
-          <td data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="">${truncatedDescription}${element.description.length > 195 ? '...' : ''}</td>
-          <td><button type="button" class="id-2 btn btn-walking-route btn-outline-success px-5" onclick="location.href='#pagination-walking-routes';">Выбрать</button></td>
+          <td data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="${element.name}">${element.name}</td>
+          <td data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="${element.mainObject}">${truncatedMainObject}${element.mainObject.length > 195 ? '...' : ''}</td>
+          <td data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="${element.description}">${truncatedDescription}${element.description.length > 195 ? '...' : ''}</td>
+          <td><button type="button" class="id-2 btn btn-walking-route btn-outline-success px-5" onclick="createGuide(${element.id},'${element.name}');">Выбрать</button></td>
         `;
 
         tablemaster.appendChild(row);
@@ -87,6 +93,42 @@ function createPaginationButtons(totalPages, currentPageIndex) {
   paginationmaster.innerHTML = "";
   paginationmaster.appendChild(PG);
 }
+
+//Распределение гидов по маршруту
+function createGuide(tourId,tourName) {
+  const urlGuide = `http://exam-2023-1-api.std-900.ist.mospolytech.ru/api/routes/${tourId}/guides?api_key=${api_key}`;
+
+  fetch(urlGuide, {
+    method: "GET",
+  })
+    .then(resp => resp.json())
+    .then(function(data) {
+      guideTable.innerHTML = "";
+      
+      guidesContainer.classList.remove(`d-none`);
+      guidesRouteName.innerHTML = tourName;
+
+      data.forEach(element => {
+        const row = document.createElement("tr");
+        row.innerHTML = ` <td><i class="fa-solid fa-id-badge fa-3x" aria-hidden="true"></i></td>
+        <td data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip"
+            data-bs-title="${element.name}">${element.name}</td>
+        <td data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip"
+            data-bs-title="${element.language}">${element.language}</td>
+        <td data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="${element.workExperience}">${element.workExperience}
+        </td>
+        <td data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="${element.pricePerHour}">
+        ${element.pricePerHour}</td>
+        <td><button type="button" class="id-293 btn btn-guides btn-outline-success px-5" data-bs-toggle="modal"
+                data-bs-target="#application-formalization-modal">Выбрать</button></td>`;
+
+        guideTable.appendChild(row);
+      });
+
+      // console.log(data);
+    })
+}
+
 
 fetch(url, {
   method: "GET",
