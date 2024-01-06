@@ -7,6 +7,15 @@ const pageUP = document.getElementById("pagePAGE");
 const guideTable = document.getElementById("guideTable");
 const guidesContainer = document.getElementById("guidesContainer");
 const guidesRouteName = document.getElementById("guidesRouteName");
+const FIOguide = document.getElementById("FIO-guide");
+const nameItinerary = document.getElementById("name-itinerary");
+const startMonet = document.getElementById("stock-money");
+const dataTourForm = document.getElementById("data-tour-form");
+const startTimeTour = document.getElementById("start-time-tour");
+const hoursNumberNumbers = document.getElementById("hours-number-numbers");
+const numberOfPeople = document.getElementById("number-of-people");
+
+
 
 // Функция для получения и отображения данных для определенной страницы
 function fetchDataAndDisplay(pageIndex) {
@@ -120,7 +129,7 @@ function createGuide(tourId,tourName) {
         <td data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="${element.pricePerHour}">
         ${element.pricePerHour}</td>
         <td><button type="button" class="id-293 btn btn-guides btn-outline-success px-5" data-bs-toggle="modal"
-                data-bs-target="#application-formalization-modal">Выбрать</button></td>`;
+                data-bs-target="#application-formalization-modal" onclick="OpenForm('${element.name}','${tourName}','${element.pricePerHour}');">Выбрать</button></td>`;
 
         guideTable.appendChild(row);
       });
@@ -130,16 +139,134 @@ function createGuide(tourId,tourName) {
 }
 
 
+dataTourForm.addEventListener('input', function () {
+  console.log(this.value);
+
+  let dateObject = new Date(this.value);
+  let dateOfTheWeek = (dateObject.getDay()); 
+
+  var russianHolidays = [
+    new Date('2024-01-01'),   // New Year's Day
+    new Date('2024-01-07'),   // Orthodox Christmas Day
+    new Date('2024-03-08'),   // International Women's Day
+    new Date('2024-05-01'),   // Spring and Labor Day
+    new Date('2024-05-09'),   // Victory Day
+    new Date('2024-06-12'),  // Russia Day
+    new Date('2024-11-04')   // Unity Day
+];
+
+isHoliday = false;
+
+for (var i = 0; i < russianHolidays.length; i++) {
+  if (dateObject.getTime() === russianHolidays[i].getTime()) {
+      isHoliday = true;
+      break;
+  }
+}
+
+if (dateOfTheWeek === 0 || dateOfTheWeek === 6 || isHoliday) {
+  isThisDayOff = 1.5;
+  // console.log('holiday');
+} 
+else {
+  isThisDayOff = 1;
+}
+upDatePrice();
+
+});
+
+//работает не коректно
+// startTimeTour.addEventListener('input', function () {
+//   console.log(this.value);
+
+//   let getObject = new Date(this.value);
+//   let timeOfTheDay= getObject.getHours();
+//   console.log(timeOfTheDay);
+
+//   let isMorning = 0;
+//   let isItEvening = 0;
+//   let isThisDayOff = 1;
+
+//   if(timeOfTheDay >= 9 && timeOfTheDay <= 12) {
+//     isMorning = 400;
+//   } else if(timeOfTheDay >= 20 && timeOfTheDay <= 23) {
+//     isItEvening = 1000;
+//   }
+
+//   upDatePrice();
+// });
+
+hoursNumberNumbers.addEventListener('input', function () {
+console.log(this.value);
+});
+
+numberOfPeople.addEventListener('input', function () {
+console.log(this.value);
+});
+
+//рабочая форма
+function OpenForm(GuideData,tourName,pricePerHour) {
+  console.log(GuideData,tourName,pricePerHour);
+
+  guideServiceCost = pricePerHour;
+  FIOguide.innerHTML = GuideData;
+  nameItinerary.innerHTML = tourName;
+  startMonet.innerHTML = pricePerHour;
+
+  upDatePrice();
+}
+
+function setLengthOfTour(length) {
+  console.log(length);
+}
+
+let hoursNumber, isMorning, isItEvening, numberOfVisitors;
+let isThisDayOff = 1;
+let guideServiceCost;
+
+//function update form
+function upDatePrice() {
+  let price = guideServiceCost * isThisDayOff //+ isMorning + isItEvening;
+  startMonet.innerHTML = price;
+}
+
+ function isMorningg(hoursNumber, startHour, endHour) {
+   if (isNaN(hoursNumber) || isNaN(startHour) || isNaN(endHour)) {
+     throw new Error('Неверные значения аргументов');
+   }
+
+   return startHour <= 12 && endHour >= 9 ? 400 : 0;
+ }
+
+ function additionalOptions(isSchoolkid, isStudent, isInteractiveGuide, startMonet) {
+   if (isSchoolkid < 0 || isStudent < 0 || isInteractiveGuide < 0) {
+     throw new Error('Неверное значение аргументов');
+   }
+
+   let price = 0;
+
+   if (isSchoolkid || isStudent) {
+     price -= startMonet * 0.15;
+   }
+
+   if (isInteractiveGuide) {
+     price += startMonet * 0.5;
+   }
+
+   return price;
+ }
+
+
 fetch(url, {
   method: "GET",
 })
   .then(resp => resp.json())
   .then(function(data) {
-    console.log(data.length);
+    //console.log(data.length);
     const totalPages = Math.ceil(data.length / 10);
     createPaginationButtons(totalPages, 0);
     fetchDataAndDisplay(0);
   })
   .catch(function(error) {
-    console.log(error);
+    //console.log(error);
   });
